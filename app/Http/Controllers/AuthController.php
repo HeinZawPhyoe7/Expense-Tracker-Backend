@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 
 
@@ -58,7 +59,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function user()
     {
         return response()->json(auth()->user());
     }
@@ -94,10 +95,12 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+        $user = Auth::user();
+
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth()->factory()->getTTL() * 60 * 60,
         ]);
     }
 }

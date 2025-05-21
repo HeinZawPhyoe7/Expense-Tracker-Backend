@@ -12,7 +12,9 @@ Route::group([
     Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:api')->name('logout');
     Route::post('/refresh', [AuthController::class, 'refresh'])->middleware('auth:api')->name('refresh');
-    Route::post('/me', [AuthController::class, 'me'])->middleware('auth:api')->name('me');
+    Route::get('/user', [AuthController::class, 'user'])->middleware('auth:api')->name('user');
 
-    Route::post('/expense/store', [ExpenseTrackerController::class, 'store'])->name('store');
+    //Expense
+    Route::post('/expense/store', [ExpenseTrackerController::class, 'store'])->name('expense-store');
+    Route::get('/expense/getall', [ExpenseTrackerController::class, 'getall'])->name('expense-getall');
 });

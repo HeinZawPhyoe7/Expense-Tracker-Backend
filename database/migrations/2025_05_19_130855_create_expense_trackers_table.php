@@ -13,14 +13,19 @@ return new class extends Migration
     {
         Schema::create('expense_trackers', function (Blueprint $table) {
             $table->id();
-            $table->string('total_balance')->nullable();
+            $table->bigInteger('total_balance')->default(0)->nullable();
+            $table->integer('income')->default(0)->nullable();
+            $table->integer('expense')->default(0)->nullable();
             $table->string('type');
             $table->string('wallet');
             $table->string('expense_category');
             $table->date('date');
             $table->bigInteger('amount');
             $table->string('description');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
