@@ -21,6 +21,23 @@ class ExpenseTrackerController extends Controller
             'description' => 'required',
         ]);
 
+        // Calculate current balance
+        $myIncome = ExpenseTracker::where('user_id', $user->id)->where('type', 'income')->sum('amount');
+        $myExpense = ExpenseTracker::where('user_id', $user->id)->where('type', 'expense')->sum('amount');
+        $myBalance = ExpenseTracker::where('user_id', $user->id)->where('total_balance', 0)->sum('amount');
+
+        $Income = ExpenseTracker::where('user_id', $user->id)
+            ->where('income', 0)->sum('amount');
+        $Expense = ExpenseTracker::where('user_id', $user->id)
+            ->where('expense', 0)->sum('amount');
+
+        $totalIncome = $request->income + $Income + $myIncome;
+        $totalExpense = $request->expense + $Expense + $myExpense;
+
+        $totalBalance = $request->total_balance + $myBalance + $totalIncome - $totalExpense;
+
+
+
         $expense = new ExpenseTracker;
         $expense->type = $request->type;
         $expense->wallet = $request->wallet;
@@ -29,6 +46,9 @@ class ExpenseTrackerController extends Controller
         $expense->amount = $request->amount;
         $expense->description = $request->description;
         $expense->user_id = $user->id;
+        $expense->total_balance = $totalBalance;
+        $expense->income = $totalIncome;
+        $expense->expense = $totalExpense;
         $expense->save();
 
         return response()->json([

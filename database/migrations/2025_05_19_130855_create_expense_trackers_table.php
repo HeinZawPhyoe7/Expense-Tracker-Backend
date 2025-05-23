@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('expense_trackers', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('total_balance')->default(0)->nullable();
-            $table->integer('income')->default(0)->nullable();
-            $table->integer('expense')->default(0)->nullable();
+            $table->bigInteger('total_balance')->default(0);
+            $table->integer('income')->default(0);
+            $table->integer('expense')->default(0);
             $table->string('type');
             $table->string('wallet');
             $table->string('expense_category');
